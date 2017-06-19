@@ -1,0 +1,11 @@
+---
+object_type: domain
+version: 1.0
+object:
+  attributes:
+    name: Customer
+    description:
+    display_name:
+    system:
+    priority: 4
+    enabled: true
