@@ -78,7 +78,7 @@ object:
       datatype: string
       priority: 4
       owner: 
-      default_value: /Customer/Integration/MIQ_IPAM/Network_Lookup/
+      default_value: "/Customer/Integration/MIQ_IPAM/Network_Lookup/"
       substitute: true
       message: create
       visibility: 

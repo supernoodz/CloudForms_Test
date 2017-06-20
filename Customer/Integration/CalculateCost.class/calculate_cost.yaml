@@ -1,0 +1,18 @@
+---
+object_type: instance
+version: 1.0
+object:
+  attributes:
+    display_name: 
+    name: calculate_cost
+    inherits: 
+    description: 
+  fields:
+  - cpu_price:
+      value: '0.75'
+  - mem_price:
+      value: '1.25'
+  - storage_price:
+      value: '0.65'
+  - method:
+      value: calculate_cost

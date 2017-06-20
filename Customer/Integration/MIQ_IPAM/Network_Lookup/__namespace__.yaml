@@ -4,8 +4,7 @@ version: 1.0
 object:
   attributes:
     name: Network_Lookup
-    description:
-    display_name:
-    system:
-    priority:
-    enabled:
+    description: 
+    display_name: 
+    priority: 
+    enabled: 

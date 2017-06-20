@@ -4,8 +4,10 @@ version: 1.0
 object:
   attributes:
     name: Customer
-    description:
-    display_name:
-    system:
-    priority: 4
+    description: Extension of MIQ Core Code
+    display_name: 
+    priority: 2
     enabled: true
+    tenant_id: 1000000000001
+    source: user
+    top_level_namespace: 
