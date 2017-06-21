@@ -343,21 +343,33 @@ begin
 
   # Some BUs need to define the machine name but use the other values from the IPAM. To release the IP correctly,
   # we need to update the IPAM instance with the new name
-  dynamic_hostname = tags[:miq_dynamic_hostname] || 'false'
-  if boolean(dynamic_hostname)
-    log(:info, "dynamic_hostname <#{dynamic_hostname}> ")
-      user_defined_name = @prov.get_option(:vm_name) || @ws_values[:vm_name]
-      log(:info, "user_defined_name <#{user_defined_name.inspect}> ")
-      @prov.set_option(:linux_host_name, user_defined_name)
-      @prov.set_option(:vm_target_hostname, user_defined_name)
-      @prov.set_option(:host_name, user_defined_name)
+  # dynamic_hostname = tags[:miq_dynamic_hostname] || 'false'
+  # dynamic_hostname = 'false'
+  # if boolean(dynamic_hostname)
+  #   log(:info, "dynamic_hostname <#{dynamic_hostname}> ")
+  #     user_defined_name = @prov.get_option(:vm_name) || @ws_values[:vm_name]
+  #     log(:info, "user_defined_name <#{user_defined_name.inspect}> ")
+  #     @prov.set_option(:linux_host_name, user_defined_name)
+  #     @prov.set_option(:vm_target_hostname, user_defined_name)
+  #     @prov.set_option(:host_name, user_defined_name)
 
-    # Update instance hostname
-    ip_candidate['hostname'] = @prov.get_option(:vm_name).to_s.strip
+  #   # Update instance hostname
+  #   ip_candidate['hostname'] = @prov.get_option(:vm_name).to_s.strip
 
-  elsif ip_candidate['hostname'].present?
+  # elsif ip_candidate['hostname'].present?
+  #   # Use vm_name information from acquired IPAM hostname
+  #   log(:info, "dynamic_hostname <#{dynamic_hostname}> Using IPAM value")
+  #   @prov.set_option(:vm_target_name, ip_candidate['hostname'])
+  #   @prov.set_option(:linux_host_name, ip_candidate['hostname'])
+  #   @prov.set_option(:vm_name, ip_candidate['hostname'])
+  #   @prov.set_option(:vm_target_hostname, ip_candidate['hostname'])
+  #   @prov.set_option(:host_name, ip_candidate['hostname'])
+  # end
+
+  ip_candidate['hostname'] = @prov.get_option(:vm_name)
+  if ip_candidate['hostname'].present?
     # Use vm_name information from acquired IPAM hostname
-    log(:info, "dynamic_hostname <#{dynamic_hostname}> Using IPAM value")
+    log(:info, "ip_candidate['hostname'] <#{ip_candidate['hostname']}> Using IPAM value")
     @prov.set_option(:vm_target_name, ip_candidate['hostname'])
     @prov.set_option(:linux_host_name, ip_candidate['hostname'])
     @prov.set_option(:vm_name, ip_candidate['hostname'])
