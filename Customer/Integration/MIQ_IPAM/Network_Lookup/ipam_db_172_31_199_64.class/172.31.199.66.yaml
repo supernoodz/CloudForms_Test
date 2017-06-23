@@ -1,0 +1,34 @@
+---
+object_type: instance
+version: 1.0
+object:
+  attributes:
+    display_name:
+    name: 172.31.199.66
+    inherits:
+    description:
+  fields:
+  - vlan:
+      value: ''
+  - hostname:
+      value: ''
+  - ipaddr:
+      value: '172.31.199.66'
+  - submask:
+      value: '255.255.255.192'
+  - gateway:
+      value: ' 172.31.199.65'
+  - inuse:
+      value: 'FALSE'
+  - vlan2:
+      value: ''
+  - ipaddr2:
+      value: ''
+  - submask2:
+      value: ''
+  - date_released:
+      value: ''
+  - date_acquired:
+      value: ''
+  - reserve_token:
+      value: ''
