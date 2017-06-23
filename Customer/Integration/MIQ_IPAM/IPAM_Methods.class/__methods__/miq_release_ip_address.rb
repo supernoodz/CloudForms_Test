@@ -128,20 +128,22 @@ begin
   # Check to see if the VM has been tagged with 'miq_ipam_db_name'.
   # If so, release the IP from the ManageIQ IPAM system.
   # # # #
-  ipam_db_name = nil
-  if vm.to_s != ''
-    vm_name = vm.name
-    vm.tags.sort.each { |tag_element| tag_text = tag_element.split('/');
-    if tag_text.first == "atg_ipam_path"
-      ipam_db_name = tag_text.last.to_s
-      log("info", " VM:<#{vm.name}> Category:<#{tag_text.first.inspect}> Tag:<#{tag_text.last.inspect}>")
-    end
-    }
-  elsif prov.to_s != ''
-    vm_name = prov.get_option(:vm_target_name)
-    ipam_db_name = prov.get_tags[:atg_ipam_path]
-    log(:info, "prov.get_tags[:atg_ipam_path] = #{ipam_db_name}")
-  end
+  # ipam_db_name = nil
+  ipam_db_name = 'ipam_db_172_31_199_64'
+  # if vm.to_s != ''
+  #   vm_name = vm.name
+  #   vm.tags.sort.each { |tag_element| tag_text = tag_element.split('/');
+  #   if tag_text.first == "atg_ipam_path"
+  #     ipam_db_name = tag_text.last.to_s
+  #     log("info", " VM:<#{vm.name}> Category:<#{tag_text.first.inspect}> Tag:<#{tag_text.last.inspect}>")
+  #   end
+  #   }
+  # elsif prov.to_s != ''
+  #   vm_name = prov.get_option(:vm_target_name)
+  #   ipam_db_name = prov.get_tags[:atg_ipam_path]
+  #   log(:info, "prov.get_tags[:atg_ipam_path] = #{ipam_db_name}")
+  # end
+  vm_name = vm.name
 
   ## If we can't get the IPAM Database name from the VM or Provision tags, just exit
   if ipam_db_name.nil? || !ipam_db_name
