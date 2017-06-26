@@ -9,7 +9,7 @@ object:
     description: 
   fields:
   - AcquireIPAddress:
-      value: "#/Integration/MIQ_IPAM/IPAM_Methods/miq_acquire_ip_address"
+      value: "/Integration/MIQ_IPAM/IPAM_Methods/miq_acquire_ip_address"
   - Provision:
       value: "/Infrastructure/VM/Provisioning/StateMachines/Methods/Provision"
   - CheckProvisioned:

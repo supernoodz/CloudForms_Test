@@ -16,7 +16,7 @@ def get_auth
   JSON.parse(rest_return)['auth_token']
 end
 # 
-def exec_provision_request(image, memory, cores, vlan, parent_service_id, install_app)
+def exec_provision_request(image, vm_name, memory, cores, vlan, parent_service_id, install_app)
   url = URI.encode(API_URI + "/provision_requests")
 
   post_params = {
@@ -27,7 +27,7 @@ def exec_provision_request(image, memory, cores, vlan, parent_service_id, instal
     :vm_fields => {
       :number_of_cpus    => cores.to_s,
       :number_of_sockets => 1.to_s,
-      :vm_name           => get_vm_name,
+      :vm_name           => vm_name,
       :vm_memory         => (memory.to_i * 1024).to_s, #needs to be in MB
       :vlan              => vlan,
       :sysprep_custom_spec   => ["1000000000004", "default Linux"],
@@ -65,13 +65,13 @@ def exec_provision_request(image, memory, cores, vlan, parent_service_id, instal
   result['results'][0]['id']
 end
 
-def get_vm_name
-  vm_name = "vf001"
+def get_vm_name(vm_name)
   vm = $evm.vmdb(:Vm).find_by(:name=>vm_name)
   while vm
     vm_name = vm_name.succ
     vm = $evm.vmdb(:Vm).find_by(:name=>vm_name)
   end
+  # $evm.log(:info, "VM Name: #{vm_name}")
   vm_name
 end
 
@@ -103,8 +103,6 @@ PASSWORD    = 'smartvm'
 task = $evm.root['service_template_provision_task']
 task ? parent_service_id = task.destination.id : parent_service_id = nil
 
-parent_service_id = nil
-
 # owner = $evm.root['user']
 
 # key_pair and security_group - Processed by amazon_CustomizeRequest, expects name.
@@ -122,15 +120,21 @@ number_of_vms ? number_of_vms = number_of_vms.to_i : number_of_vms = 1
 
 cpus    = 2
 memory  = 2 #GB
-network = '523 - UCS_GESTION'
-# network = 'Management Network'
+# network = '523 - UCS_GESTION'
+network = '524'
+
+vm_name = 'vf001'
+vm_name = get_vm_name(vm_name)
 
 # https://github.com/ManageIQ/manageiq_docs/blob/master/api/reference/provision_requests.adoc
-1.upto(1) do |i|
+1.upto(number_of_vms) do |i|
   if $evm.root.attributes.has_key?("dialog_option_#{i}_app")
     install_app = $evm.root["dialog_option_#{i}_app"]
   else
     install_app = 'none'
   end
-  exec_provision_request(image, memory, cpus, network, parent_service_id, install_app)
+  # vm_name = get_vm_name(vm_name)
+  $evm.log(:info, "VM Name: #{vm_name}")
+  exec_provision_request(image, vm_name, memory, cpus, network, parent_service_id, install_app)
+  vm_name = vm_name.succ
 end
