@@ -16,7 +16,7 @@ def get_auth
   JSON.parse(rest_return)['auth_token']
 end
 # 
-def exec_provision_request(image, vm_name, memory, cores, vlan, parent_service_id, install_app)
+def exec_provision_request(image, vm_name, memory, cores, network, dns_servers, parent_service_id, install_app)
   url = URI.encode(API_URI + "/provision_requests")
 
   post_params = {
@@ -29,11 +29,10 @@ def exec_provision_request(image, vm_name, memory, cores, vlan, parent_service_i
       :number_of_sockets => 1.to_s,
       :vm_name           => vm_name,
       :vm_memory         => (memory.to_i * 1024).to_s, #needs to be in MB
-      :vlan              => vlan,
+      :vlan              => network,
       :sysprep_custom_spec   => ["1000000000004", "default Linux"],
-      # :sysprep_spec_override => 1,
-      :sysprep_enabled => ["fields", "Specification"]
-      # :sysprep_enabled   => "Specification"
+      :sysprep_enabled   => ["fields", "Specification"],
+      :dns_servers       => dns_servers
     },
     :requester => {
       :user_name         => "admin",
@@ -118,6 +117,8 @@ raise 'Image not found' if image.nil?
 number_of_vms = $evm.root['dialog_number_of_vms']
 number_of_vms ? number_of_vms = number_of_vms.to_i : number_of_vms = 1
 
+dns_servers = $evm.root['dialog_dns_servers']
+
 cpus    = 2
 memory  = 2 #GB
 # network = '523 - UCS_GESTION'
@@ -135,6 +136,15 @@ vm_name = get_vm_name(vm_name)
   end
   # vm_name = get_vm_name(vm_name)
   $evm.log(:info, "VM Name: #{vm_name}")
-  exec_provision_request(image, vm_name, memory, cpus, network, parent_service_id, install_app)
+  exec_provision_request(
+    image,
+    vm_name,
+    memory,
+    cpus,
+    network,
+    dns_servers,
+    parent_service_id,
+    install_app
+  )
   vm_name = vm_name.succ
 end

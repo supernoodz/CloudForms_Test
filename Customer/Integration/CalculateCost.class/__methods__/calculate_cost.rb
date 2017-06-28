@@ -4,34 +4,40 @@
 
 $evm.root.attributes.sort.each { |k, v| $evm.log(:info, "\t Attribute: #{k} = #{v}")}
 
+exit MIQ_OK unless $evm.root.attributes.has_key?('dialog_template')
+
 cpu_price      = $evm.object['cpu_price']                   # get os price per CPU from the instance
 mem_price      = $evm.object['mem_price']                   # get size price per GB from the instance
 storage_price  = $evm.object['storage_price']           # get storage price per GB from the instance
 
-case $evm.root['vmdb_object_type']
-when 'service_template'
-  # Standard, single catalogue item request...
+# case $evm.root['vmdb_object_type']
+# when 'service_template'
+#   # Standard, single catalogue item request...
 
-  service_template  = $evm.vmdb('service_template')
-  resource          = service_template.service_resources.first.resource
+#   service_template  = $evm.vmdb('service_template')
+#   resource          = service_template.service_resources.first.resource
 
-  number_of_sockets = resource.options[:number_of_sockets].first.to_i
-  cores_per_socket  = resource.options[:cores_per_socket].first.to_i
-  cpu_count         = number_of_sockets * cores_per_socket
+#   number_of_sockets = resource.options[:number_of_sockets].first.to_i
+#   cores_per_socket  = resource.options[:cores_per_socket].first.to_i
+#   cpu_count         = number_of_sockets * cores_per_socket
 
-  mem_size          = resource.options[:vm_memory].first.to_i / 1024 # GB
+#   mem_size          = resource.options[:vm_memory].first.to_i / 1024 # GB
 
-  storage_size      = resource.vm_template.disk_1_size.to_i / (1024 * 1024 * 1024) # GB
-else
+#   storage_size      = resource.vm_template.disk_1_size.to_i / (1024 * 1024 * 1024) # GB
+# else
   # Bundle of VMs, as yet unspecified
 
   number_of_vms = $evm.root['dialog_number_of_vms']
   number_of_vms ? number_of_vms = number_of_vms.to_i : (exit MIQ_OK)
 
-  image_ems_ref = "vm-71"
+  # image_ems_ref = "vm-71"
+
+  image_ems_ref = $evm.root['dialog_template']
+  image_ems_ref = image_ems_ref.gsub(/_/,'-')
 
   image = $evm.vmdb(:VmOrTemplate).find_by(:ems_ref => image_ems_ref)
-  raise 'Image not found' if image.nil?
+  # raise 'Image not found' if image.nil?
+  exit MIQ_OK if image.nil?
 
   number_of_sockets = 1
   cores_per_socket  = 2
@@ -39,16 +45,7 @@ else
   mem_size          = 2 # GB
   storage_size      = image.disk_1_size.to_i / (1024 * 1024 * 1024) # GB
 
-end
-
-flavor = $evm.vmdb(:Flavor).find_by(:id => $evm.root['dialog_instance_type'])
-if flavor.nil?
-  cpu_count, mem_size, storage_size = 0, 0, 0
-else
-  cpu_count = flavor.cpus * flavor.cpu_cores
-  mem_size = flavor.memory / (1024*1024*1024)
-  storage_size = 40 # should grab from the image
-end
+# end
 
 # Calculate the cost for the CPU, memory, and storage
 cpu_cost     = cpu_price * cpu_count
