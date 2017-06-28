@@ -69,14 +69,16 @@ PASSWORD    = 'smartvm'
 @auth_token = get_auth
 
 prov = $evm.root["miq_provision"]
-host = prov.vm.ipaddresses[1]
+# host = prov.vm.ipaddresses[1]
+host = prov.vm.ipaddresses[0]
 
-install_app = prov.options[:ws_values][:install_app]
+# install_app = prov.options[:ws_values][:install_app]
+install_app = "Vodafone All-In-One"
 
-exit MIQ_OK if install_app.nil? || install_app == 'none'
+# exit MIQ_OK if install_app.nil? || install_app == 'none'
 
 # Default VMware machine credentials
-name = "tbc"
+name = "VMware (Machine) 2"
 
 credential = $evm.vmdb('ManageIQ_Providers_AutomationManager_Authentication').find_by(:name => name).id
 raise 'Credentials not found' if credential.nil?
