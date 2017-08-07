@@ -82,7 +82,7 @@ else
   host = prov.vm.ipaddresses[0]
 
   # install_app = prov.options[:ws_values][:install_app]
-  install_app = "Vodafone All-In-One"
+  install_app = "All-In-One"
 
   # exit MIQ_OK if install_app.nil? || install_app == 'none'
 
