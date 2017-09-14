@@ -8,5 +8,7 @@ object:
     inherits: 
     description: 
   fields:
+  - cf_user:
+      value: Nick.Catling-a
   - method1:
       value: create_provision_request

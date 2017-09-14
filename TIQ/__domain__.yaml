@@ -3,11 +3,11 @@ object_type: domain
 version: 1.0
 object:
   attributes:
-    name: Customer
+    name: TIQ
     description: Extension of MIQ Core Code
     display_name: 
     priority: 2
     enabled: true
-    tenant_id: 1000000000001
+    tenant_id: 1
     source: user
     top_level_namespace: 
