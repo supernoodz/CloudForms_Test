@@ -9,7 +9,7 @@ object:
     description: 
   fields:
   - cpu_price:
-      value: '0.75'
+      value: '10'
   - mem_price:
       value: '1.25'
   - storage_price:
